@@ -1,0 +1,26 @@
+{
+  "name": "tailwind-setup",
+  "version": "1.1.0",
+  "main": "bin/index.js",
+  "type": "module",
+  "bin": {
+    "headwind": "index.js"
+  },
+  "scripts": {
+    "start": "node bin/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.22",
+    "strip-ansi": "^7.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3"
+  }
+}

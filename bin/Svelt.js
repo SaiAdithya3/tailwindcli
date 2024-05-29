@@ -4,49 +4,49 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 
 export default function SvelteKit() {
-    console.log('Setting up Tailwind CSS for SvelteKit...');
+  console.log('Setting up Tailwind CSS for SvelteKit...');
 
-    // Install dependencies
-    execSync('npm install -D tailwindcss@latest postcss@latest autoprefixer@latest', { stdio: 'inherit' });
+  // Install dependencies
+  execSync('npm install -D tailwindcss@latest postcss@latest autoprefixer@latest', { stdio: 'inherit' });
 
-    // Initialize Tailwind CSS
-    execSync('npx tailwindcss init', { stdio: 'inherit' });
+  // Initialize Tailwind CSS
+  execSync('npx tailwindcss init', { stdio: 'inherit' });
 
-    // Check if svelte.config.js or svelte.config.ts exists
-    const svelteConfigPathJS = 'svelte.config.js';
-    const svelteConfigPathTS = 'svelte.config.ts';
-    const svelteConfigPath = fs.existsSync(svelteConfigPathJS) ? svelteConfigPathJS : fs.existsSync(svelteConfigPathTS) ? svelteConfigPathTS : null;
+  // Check if svelte.config.js or svelte.config.ts exists
+  const svelteConfigPathJS = 'svelte.config.js';
+  const svelteConfigPathTS = 'svelte.config.ts';
+  const svelteConfigPath = fs.existsSync(svelteConfigPathJS) ? svelteConfigPathJS : fs.existsSync(svelteConfigPathTS) ? svelteConfigPathTS : null;
 
-    if (!svelteConfigPath) {
-        console.error('Unable to find svelte.config.js or svelte.config.ts');
-        return;
-    }
+  if (!svelteConfigPath) {
+    console.error('Unable to find svelte.config.js or svelte.config.ts');
+    return;
+  }
 
-    // Modify svelte.config.js or svelte.config.ts
-    const svelteConfig = fs.readFileSync(svelteConfigPath, 'utf8');
-    const lines = svelteConfig.split('\n');
-    let importVitePreprocess = "import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';";
-    let preprocessConfig = `  preprocess: vitePreprocess(),`;
+  // Modify svelte.config.js or svelte.config.ts
+  const svelteConfig = fs.readFileSync(svelteConfigPath, 'utf8');
+  const lines = svelteConfig.split('\n');
+  let importVitePreprocess = "import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';";
+  let preprocessConfig = `  preprocess: vitePreprocess(),`;
 
-    // Insert the import statement at the top
-    if (!svelteConfig.includes(importVitePreprocess)) {
-        lines.splice(1, 0, importVitePreprocess);
-    }
+  // Insert the import statement at the top
+  if (!svelteConfig.includes(importVitePreprocess)) {
+    lines.splice(1, 0, importVitePreprocess);
+  }
 
-    // Insert the preprocess configuration
-    const kitIndex = lines.findIndex(line => line.includes('kit:'));
-    if (kitIndex !== -1) {
-        const closingBracketIndex = lines.findIndex((line, index) => index > kitIndex && line.includes('}'));
-        lines.splice(closingBracketIndex + 1, 0, preprocessConfig);
-    } else {
-        console.error('Unable to find the kit configuration in svelte.config.js or svelte.config.ts');
-        return;
-    }
+  // Insert the preprocess configuration
+  const kitIndex = lines.findIndex(line => line.includes('kit:'));
+  if (kitIndex !== -1) {
+    const closingBracketIndex = lines.findIndex((line, index) => index > kitIndex && line.includes('}'));
+    lines.splice(closingBracketIndex + 1, 0, preprocessConfig);
+  } else {
+    console.error('Unable to find the kit configuration in svelte.config.js or svelte.config.ts');
+    return;
+  }
 
-    fs.writeFileSync(svelteConfigPath, lines.join('\n'));
+  fs.writeFileSync(svelteConfigPath, lines.join('\n'));
 
-    // Update tailwind.config.js
-    const tailwindConfigContent = `/** @type {import('tailwindcss').Config} */
+  // Update tailwind.config.js
+  const tailwindConfigContent = `/** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
@@ -55,23 +55,23 @@ export default {
   plugins: [],
 };`;
 
-    fs.writeFileSync('tailwind.config.js', tailwindConfigContent);
+  fs.writeFileSync('tailwind.config.js', tailwindConfigContent);
 
-    // Create src/app.css and prepend Tailwind CSS directives
-    const cssFolderPath = 'src';
-    if (!fs.existsSync(cssFolderPath)) {
-        fs.mkdirSync(cssFolderPath, { recursive: true });
-    }
+  // Create src/app.css and prepend Tailwind CSS directives
+  const cssFolderPath = 'src';
+  if (!fs.existsSync(cssFolderPath)) {
+    fs.mkdirSync(cssFolderPath, { recursive: true });
+  }
 
-    const appCssPath = `${cssFolderPath}/app.css`;
-    const appCssContent = `@tailwind base;
+  const appCssPath = `${cssFolderPath}/app.css`;
+  const appCssContent = `@tailwind base;
 @tailwind components;
 @tailwind utilities;`;
-    fs.writeFileSync(appCssPath, appCssContent);
+  fs.writeFileSync(appCssPath, appCssContent);
 
-    // Update +layout.svelte to import app.css
-    const layoutSveltePath = 'src/routes/+layout.svelte';
-    const layoutSvelteContent = `<script>
+  // Update +layout.svelte to import app.css
+  const layoutSveltePath = 'src/routes/+layout.svelte';
+  const layoutSvelteContent = `<script>
   import "../app.css";
   import Header from './Header.svelte';
 </script>
@@ -125,7 +125,7 @@ export default {
   }
 </style>`;
 
-    fs.writeFileSync(layoutSveltePath, layoutSvelteContent);
+  fs.writeFileSync(layoutSveltePath, layoutSvelteContent);
 
-    console.log('Tailwind CSS setup completed for SvelteKit!');
+  console.log('Tailwind CSS setup completed for SvelteKit!');
 }

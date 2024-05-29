@@ -16,7 +16,6 @@ import SvelteKit from './bin/Svelt.js';
 import stripAnsi from 'strip-ansi';
 
 const frameworks = [
-
     chalk.magenta('React with Vite'),
     chalk.blueBright('React with Create React App'),
     chalk.black('Next.js'),
@@ -24,6 +23,8 @@ const frameworks = [
     chalk.cyan('Nuxt.js'),
     chalk.red('Angular'),
     chalk.yellowBright('Svelte with SvelteKit'),
+    chalk.cyanBright('Gatsby'),
+    chalk.greenBright('Laravel'),
 ];
 
 inquirer.prompt([
@@ -59,4 +60,3 @@ inquirer.prompt([
         console.log('Invalid framework selected.');
     }
 });
-
